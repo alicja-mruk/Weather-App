@@ -9,8 +9,6 @@ type Props = {
 };
 
 const useCityWeather = ({ city }: Props) => {
-  const { getWeatherByCity } = useGetWeatherByCity();
-
   return useQuery({
     queryKey: [CacheKey.Weather, city],
     queryFn: () => getWeatherByCity(city),
@@ -19,18 +17,12 @@ const useCityWeather = ({ city }: Props) => {
   });
 };
 
-const useGetWeatherByCity = () => {
-  const getWeatherByCity = async (city: string) => {
-    const location = await getCoordsByCity(city);
-    const getForecast = () =>
-      publicAxios.get<WeatherResult>(Endpoints.getFiveDaysForecast(location)).then(res => res.data);
+const getWeatherByCity = async (city: string) => {
+  const location = await getCoordsByCity(city);
+  const getForecast = () =>
+    publicAxios.get<WeatherResult>(Endpoints.getFiveDaysForecast(location)).then(res => res.data);
 
-    return getForecast();
-  };
-
-  return {
-    getWeatherByCity,
-  };
+  return getForecast();
 };
 
 export default useCityWeather;
